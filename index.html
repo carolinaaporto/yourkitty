@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <meta name="description" content="Find your new best friend, reunite lost cats with their families, and help street cats get the care they need.">
+  <title>yourkitty — Every cat deserves a safe place</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #25352e;
+      --muted: #69766d;
+      --paper: #f7f5ef;
+      --white: #fffefa;
+      --green: #b94f73;
+      --green-dark: #913b5a;
+      --sage: #f7e3ea;
+      --peach: #f2dfcf;
+      --line: #e7e5dc;
+      --orange: #d6754c;
+      --shadow: 0 18px 50px rgb(37 53 46 / 8%);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+      color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 20px; height: 1px; background: currentColor; content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { letter-spacing: -.045em; }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(48px, 7vw, 82px); font-weight: 500; line-height: .99; }
+    h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(36px, 5vw, 54px); font-weight: 500; line-height: 1.06; }
+    h3 { font-size: 19px; }
+    .subtle { color: var(--muted); line-height: 1.7; }
+    .pill-button {
+      display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px;
+      padding: 0 20px; border: 0; border-radius: 999px; background: var(--green); color: white;
+      font-weight: 700; text-decoration: none; transition: background .2s, transform .2s;
+    }
+    .pill-button:hover { transform: translateY(-2px); background: var(--green-dark); }
+    .pill-button.secondary { border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+    .pill-button.secondary:hover { background: var(--sage); }
+    .text-link { color: var(--green); font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+    header { position: sticky; z-index: 5; top: 0; border-bottom: 1px solid rgb(37 53 46 / 7%); background: rgb(247 245 239 / 92%); backdrop-filter: blur(14px); }
+    .nav { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 26px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-family: Georgia, serif; font-size: 24px; font-weight: 700; letter-spacing: -.05em; text-decoration: none; }
+    .brand-mark { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: var(--green); color: white; font-family: sans-serif; font-size: 19px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(16px, 3vw, 34px); }
+    .nav-links a { color: #536158; font-size: 13px; font-weight: 650; text-decoration: none; }
+    .nav-links a:hover { color: var(--green); }
+    .nav .pill-button { min-height: 42px; padding-inline: 17px; font-size: 13px; }
+    .language-select { min-height: 38px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--ink); font-size: 12px; }
+    .menu-toggle { display: none; border: 0; background: none; color: var(--ink); font-size: 24px; }
+
+    .hero { overflow: hidden; padding: 68px 0 76px; }
+    .hero-grid { display: grid; grid-template-columns: 1fr .93fr; align-items: center; gap: 6%; }
+    .hero-copy { position: relative; z-index: 1; padding-block: 20px; }
+    .hero h1 { max-width: 590px; margin-bottom: 23px; }
+    .hero h1 em { color: var(--green); font-weight: 500; }
+    .hero-copy > p:not(.eyebrow) { max-width: 480px; margin-bottom: 28px; color: var(--muted); font-size: 16px; line-height: 1.75; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+    .hero-note { display: flex; align-items: center; gap: 12px; margin-top: 34px; color: var(--muted); font-size: 12px; }
+    .avatar-stack { display: flex; padding-left: 4px; }
+    .avatar-stack span { display: grid; width: 28px; height: 28px; margin-left: -4px; place-items: center; border: 2px solid var(--paper); border-radius: 50%; background: var(--peach); font-size: 14px; }
+    .hero-visual { position: relative; min-height: 440px; }
+    .hero-photo { position: absolute; inset: 0 22px 4px 36px; overflow: hidden; border-radius: 48% 48% 26px 26px; background: #d5c6ae; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .photo-label { position: absolute; right: 3px; bottom: 28px; display: flex; max-width: 190px; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 15px; background: var(--white); box-shadow: var(--shadow); }
+    .photo-label .heart { color: var(--orange); font-size: 25px; }
+    .photo-label strong { display: block; font-size: 13px; }
+    .photo-label small { color: var(--muted); font-size: 11px; }
+    .hero-stamp { position: absolute; top: 54px; left: 3px; display: grid; width: 78px; height: 78px; place-items: center; border-radius: 50%; background: var(--peach); color: var(--green); font-family: Georgia, serif; font-size: 13px; line-height: 1.2; text-align: center; transform: rotate(-12deg); }
+
+    .location-bar { display: flex; align-items: center; gap: 20px; padding: 19px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); box-shadow: 0 8px 28px rgb(37 53 46 / 4%); }
+    .location-copy { display: flex; align-items: center; gap: 13px; }
+    .pin { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border-radius: 50%; background: var(--sage); font-size: 18px; }
+    .location-copy strong { display: block; margin-bottom: 3px; font-size: 14px; }
+    .location-copy small { color: var(--muted); font-size: 12px; }
+
+    .section { padding: 100px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+    .section-head h2 { max-width: 570px; margin-bottom: 0; }
+    .section-head > p { max-width: 350px; margin-bottom: 4px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .adopt-section { padding-top: 84px; }
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .cat-card { overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--white); transition: transform .2s, box-shadow .2s; }
+    .cat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .cat-image { position: relative; height: 235px; overflow: hidden; background: var(--sage); }
+    .cat-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+    .cat-card:hover .cat-image img { transform: scale(1.04); }
+    .cat-tag { position: absolute; top: 13px; left: 13px; padding: 7px 11px; border-radius: 99px; background: var(--white); color: var(--green); font-size: 10px; font-weight: 800; }
+    .cat-body { padding: 18px; }
+    .cat-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .cat-title h3 { margin-bottom: 4px; }
+    .cat-title span { color: var(--muted); font-size: 12px; }
+    .cat-body p { margin: 13px 0 17px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .cat-meta { display: flex; flex-wrap: wrap; gap: 7px; }
+    .cat-meta span { padding: 6px 9px; border-radius: 99px; background: #f2f1eb; color: #58665c; font-size: 10px; }
+    .cat-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 17px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .cat-footer small { color: var(--muted); font-size: 11px; }
+    .cat-footer button { padding: 0; border: 0; background: none; color: var(--green); font-size: 12px; font-weight: 750; }
+    .empty-state { grid-column: 1 / -1; padding: 40px; border: 1px dashed #c9d2c8; border-radius: 18px; color: var(--muted); line-height: 1.7; text-align: center; }
+
+    .promise { padding: 74px 0; background: var(--green); color: white; }
+    .promise-grid { display: grid; grid-template-columns: .95fr 1.05fr; align-items: center; gap: 8%; }
+    .promise .eyebrow { color: #f4c4d3; }
+    .promise h2 { max-width: 500px; margin-bottom: 18px; }
+    .promise .subtle { max-width: 440px; margin-bottom: 0; color: #f7dce5; }
+    .promise-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .promise-item { min-height: 120px; padding: 19px; border: 1px solid rgb(255 255 255 / 19%); border-radius: 15px; background: rgb(255 255 255 / 6%); }
+    .promise-item .icon { display: block; margin-bottom: 12px; font-size: 21px; }
+    .promise-item strong { display: block; margin-bottom: 6px; font-size: 13px; }
+    .promise-item small { color: #f7dce5; font-size: 11px; line-height: 1.55; }
+
+    .community-section { background: #f0eee6; }
+    .community-section .section-head { margin-bottom: 24px; }
+    .community-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+    .tab-button { padding: 10px 15px; border: 1px solid #dcded4; border-radius: 99px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 750; }
+    .tab-button.active { border-color: var(--green); background: var(--green); color: white; }
+    .community-list { display: grid; gap: 12px; }
+    .community-card { display: grid; grid-template-columns: 68px 1fr auto; align-items: center; gap: 17px; padding: 16px 19px; border: 1px solid #e2e0d6; border-radius: 15px; background: var(--white); }
+    .community-icon { display: grid; width: 60px; height: 60px; place-items: center; border-radius: 13px; background: var(--peach); font-size: 26px; }
+    .community-card.sighting .community-icon { background: var(--sage); }
+    .community-info h3 { margin-bottom: 5px; font-size: 15px; letter-spacing: -.02em; }
+    .community-info p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .community-info .place { display: inline-block; margin-top: 7px; color: var(--green); font-size: 11px; font-weight: 700; }
+    .community-action { text-align: right; }
+    .community-action small { display: block; margin-bottom: 9px; color: var(--muted); font-size: 10px; }
+    .community-action a { color: var(--green); font-size: 12px; font-weight: 750; text-decoration: none; }
+    .community-note { margin: 22px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 34px; }
+    .step { padding: 23px 20px; border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
+    .step-num { display: grid; width: 35px; height: 35px; margin-bottom: 17px; place-items: center; border-radius: 50%; background: var(--sage); color: var(--green); font-family: Georgia, serif; font-size: 17px; }
+    .step h3 { margin-bottom: 8px; font-size: 15px; }
+    .step p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+
+    .application-section { padding-top: 74px; }
+    .application-shell { display: grid; grid-template-columns: .7fr 1.3fr; overflow: hidden; border-radius: 22px; background: var(--white); box-shadow: var(--shadow); }
+    .application-aside { padding: 36px 30px; background: var(--sage); }
+    .application-aside h2 { font-size: 36px; }
+    .application-aside > p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .aside-note { margin-top: 28px; padding: 16px; border-radius: 12px; background: rgb(255 255 255 / 70%); color: #526055; font-size: 11px; line-height: 1.65; }
+    .adoption-form { padding: 34px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field[hidden], .check-row[hidden] { display: none; }
+    .field label { color: #47564c; font-size: 11px; font-weight: 750; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 43px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; outline: none; background: white; color: var(--ink); font-size: 12px; }
+    .field textarea { min-height: 92px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgb(185 79 115 / 12%); }
+    .check-row { display: flex; align-items: flex-start; gap: 9px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .check-row input { margin-top: 2px; accent-color: var(--green); }
+    .form-submit { margin-top: 7px; }
+    .form-message { display: none; margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--sage); color: var(--green-dark); font-size: 12px; line-height: 1.55; }
+    .form-message.show { display: block; }
+
+    .report-cta { padding: 58px 0; }
+    .report-card { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 35px 40px; border-radius: 20px; background: var(--peach); }
+    .report-card h2 { margin-bottom: 9px; font-size: 34px; }
+    .report-card p { margin-bottom: 0; color: #655b51; font-size: 13px; line-height: 1.65; }
+    .report-actions { display: flex; flex: 0 0 auto; gap: 9px; }
+    .report-actions .pill-button.secondary { background: rgb(255 255 255 / 60%); }
+
+    footer { padding: 32px 0; border-top: 1px solid var(--line); }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer-row p { margin: 0; color: var(--muted); font-size: 11px; }
+    .footer-links { display: flex; gap: 17px; }
+    .footer-links a { color: var(--muted); font-size: 11px; text-decoration: none; }
+
+    dialog { width: min(490px, calc(100% - 30px)); max-height: 90vh; padding: 0; overflow: auto; border: 0; border-radius: 18px; background: var(--white); color: var(--ink); box-shadow: 0 25px 100px rgb(0 0 0 / 25%); }
+    dialog::backdrop { background: rgb(28 41 34 / 54%); backdrop-filter: blur(3px); }
+    .dialog-inner { padding: 28px; }
+    .dialog-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
+    .dialog-top h2 { margin: 0; font-size: 30px; }
+    .dialog-close { width: 34px; height: 34px; border: 0; border-radius: 50%; background: #f0eee6; color: var(--ink); font-size: 19px; }
+    .report-form { display: grid; gap: 14px; }
+    .modal-message { display: none; padding: 12px; border-radius: 9px; background: var(--sage); color: var(--green-dark); font-size: 12px; line-height: 1.6; }
+    .modal-message.show { display: block; }
+
+    @media (max-width: 850px) {
+      .hero-grid { grid-template-columns: 1fr .85fr; gap: 3%; }
+      .hero-visual { min-height: 380px; }
+      .hero-photo { inset-inline: 20px 10px; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .section { padding-block: 78px; }
+      .application-shell { grid-template-columns: .8fr 1.2fr; }
+      .application-aside { padding: 28px 22px; }
+      .adoption-form { padding: 25px; }
+    }
+    @media (max-width: 650px) {
+      .wrap { width: min(100% - 32px, 480px); }
+      .nav { min-height: 65px; }
+      .brand { font-size: 22px; }
+      .menu-toggle { display: block; }
+      .nav-links { position: absolute; top: 64px; right: 0; left: 0; display: none; align-items: stretch; padding: 16px 22px 20px; border-bottom: 1px solid var(--line); background: var(--paper); }
+      .nav-links.open { display: flex; flex-direction: column; gap: 18px; }
+      .nav-links a { font-size: 14px; }
+      .nav .pill-button { display: none; }
+      .language-select { margin-left: auto; }
+      .hero { padding: 42px 0 47px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 25px; }
+      .hero h1 { max-width: 500px; font-size: clamp(48px, 15vw, 70px); }
+      .hero-copy > p:not(.eyebrow) { font-size: 14px; }
+      .hero-visual { min-height: 345px; margin-inline: 9px; }
+      .hero-photo { inset: 0 29px 0 32px; border-radius: 48% 48% 23px 23px; }
+      .hero-stamp { top: 30px; left: 0; width: 68px; height: 68px; font-size: 11px; }
+      .photo-label { right: 0; bottom: 20px; }
+      .location-bar { padding: 16px; }
+      .section { padding-block: 65px; }
+      .adopt-section { padding-top: 54px; }
+      .section-head { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+      .section-head h2 { font-size: 39px; }
+      .section-head > p { font-size: 13px; }
+      .cat-grid { grid-template-columns: 1fr; gap: 14px; }
+      .cat-image { height: 245px; }
+      .promise { padding: 55px 0; }
+      .promise-grid { grid-template-columns: 1fr; gap: 27px; }
+      .promise h2 { font-size: 42px; }
+      .promise-list { gap: 9px; }
+      .promise-item { min-height: 115px; padding: 14px; }
+      .community-section .section-head { margin-bottom: 20px; }
+      .community-tabs { overflow-x: auto; padding-bottom: 3px; }
+      .tab-button { flex: 0 0 auto; }
+      .community-card { grid-template-columns: 49px 1fr; gap: 12px; padding: 13px; }
+      .community-icon { width: 47px; height: 47px; font-size: 21px; }
+      .community-action { grid-column: 2; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+      .community-action small { margin: 0; }
+      .steps { grid-template-columns: 1fr; gap: 11px; margin-top: 25px; }
+      .step { padding: 18px; }
+      .step-num { float: left; margin: 0 13px 0 0; }
+      .step h3 { padding-top: 2px; }
+      .application-section { padding-top: 55px; }
+      .application-shell { grid-template-columns: 1fr; }
+      .application-aside { padding: 25px; }
+      .application-aside h2 { font-size: 32px; }
+      .aside-note { margin-top: 18px; }
+      .adoption-form { padding: 23px 19px; }
+      .form-grid { grid-template-columns: 1fr; gap: 13px; }
+      .field.full { grid-column: auto; }
+      .report-cta { padding: 43px 0; }
+      .report-card { align-items: flex-start; flex-direction: column; padding: 26px 22px; }
+      .report-card h2 { font-size: 30px; }
+      .report-actions { flex-wrap: wrap; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="yourkitty home"><span class="brand-mark" aria-hidden="true">♡</span>yourkitty</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      <div class="nav-links">
+        <a href="#adopt">Meet the cats</a>
+        <a href="#community">Community board</a>
+        <a href="#promise">Our promise</a>
+        <a href="#application">Create account</a>
+      </div>
+      <label for="language-select" style="position:absolute;left:-10000px">Language</label>
+      <select class="language-select" id="language-select" aria-label="Language">
+        <option value="en">English</option>
+        <option value="pt-BR">Português (Brasil)</option>
+      </select>
+      <button class="pill-button auth-action" id="account-nav" type="button">Sign in / create account</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Good things happen when we care</p>
+          <h1>A little love<br>goes a <em>long way.</em></h1>
+          <p>Find a cat who feels like home, help a lost one find their way back, or be the kind neighbor who spots a cat in need.</p>
+          <div class="hero-actions">
+            <a class="pill-button" href="#adopt">Find your kindred cat <span aria-hidden="true">→</span></a>
+            <a class="pill-button secondary" href="#community">Help a cat nearby</a>
+          </div>
+          <div class="hero-note">
+            <div class="avatar-stack" aria-hidden="true"><span>🐈</span><span>🐈‍⬛</span><span>🐱</span></div>
+            <span>Local care, thoughtful matches, happier homes.</span>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-photo">
+            <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=1000&q=85" alt="A relaxed tabby cat looking toward the camera">
+          </div>
+          <div class="hero-stamp">A home<br>for every<br>heart ♡</div>
+          <div class="photo-label"><span class="heart" aria-hidden="true">♡</span><span><strong>Meet your match</strong><small>They’re closer than you think</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" aria-label="Your local area">
+      <div class="location-bar">
+        <div class="location-copy">
+          <span class="pin" aria-hidden="true">⌖</span>
+          <span><strong>Your neighborhood, your next best friend.</strong><small id="location-status" aria-live="polite">Detecting your location… Your browser may ask for permission.</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section adopt-section" id="adopt">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">The beginning of a beautiful thing</p><h2>Someone’s waiting<br>to meet you.</h2></div>
+          <p>Every cat has a little story. Get to know the ones looking for a patient, loving home near you.</p>
+        </div>
+        <div class="cat-grid" id="cat-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="promise" id="promise">
+      <div class="wrap promise-grid">
+        <div>
+          <p class="eyebrow">Adoption is a promise</p>
+          <h2>Love is the start.<br>Care is the commitment.</h2>
+          <p class="subtle">A good match puts the cat’s lifelong wellbeing first. We’ll ask a few thoughtful questions—not to judge, but to help you prepare for the real, lovely work of caring for a cat.</p>
+        </div>
+        <div class="promise-list">
+          <div class="promise-item"><span class="icon" aria-hidden="true">⌂</span><strong>A safe, settled space</strong><small>Windows, balconies, other pets, and a quiet room to decompress.</small></div>
+          <div class="promise-item"><span class="icon" aria-hidden="true">♡</span><strong>Care for every season</strong><small>Time, patience, routine veterinary care, and a plan for the years ahead.</small></div>
+          <div class="promise-item"><span class="icon" aria-hidden="true">✳</span><strong>A thoughtful introduction</strong><small>Slow introductions help cats and people feel comfortable together.</small></div>
+          <div class="promise-item"><span class="icon" aria-hidden="true">↗</span><strong>Support beyond day one</strong><small>Ask questions, get ready, and build confidence at your own pace.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section community-section" id="community">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Neighbors looking out for neighbors</p><h2>A small sighting<br>can change everything.</h2></div>
+          <p>See a missing cat or a cat who might need help? Share what you know so people nearby can respond.</p>
+        </div>
+        <div class="community-tabs" role="tablist" aria-label="Community report type">
+          <button class="tab-button active" id="tab-lost" role="tab" aria-selected="true" aria-controls="community-list" data-filter="lost">Lost cats</button>
+          <button class="tab-button" id="tab-sightings" role="tab" aria-selected="false" aria-controls="community-list" data-filter="sighting">Street cat sightings</button>
+          <button class="tab-button" id="tab-all" role="tab" aria-selected="false" aria-controls="community-list" data-filter="all">All local reports</button>
+        </div>
+        <div class="community-list" id="community-list" role="tabpanel" aria-live="polite"></div>
+        <p class="community-note">For an injured or immediately endangered cat, contact a local veterinarian, animal control, or rescue organization. Please don’t approach a frightened or unfamiliar cat if it isn’t safe.</p>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="wrap">
+        <p class="eyebrow">A good match takes a little care</p>
+        <h2>Thoughtful, from<br>the very first hello.</h2>
+        <div class="steps">
+          <article class="step"><span class="step-num">1</span><h3>Tell us about your home</h3><p>Share your household, daily routine, pet experience, and how you’ll keep your cat safe.</p></article>
+          <article class="step"><span class="step-num">2</span><h3>Get to know each other</h3><p>Talk through the cat’s needs, ask questions, and make sure the match feels right for everyone.</p></article>
+          <article class="step"><span class="step-num">3</span><h3>Make room for a new life</h3><p>Prepare your home and welcome your cat with patience, care, and ongoing support.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap application-section" id="application">
+      <div class="application-shell">
+        <aside class="application-aside">
+          <p class="eyebrow">Your yourkitty account</p>
+          <h2>Join a caring community.</h2>
+          <p>Create an account to adopt a cat or publish cats for adoption. People can also post street-cat sightings without an account.</p>
+          <div class="aside-note"><strong>Your information matters.</strong><br>Use an email you control and a strong password. Your account and home details are private and are not displayed in public cat listings.</div>
+        </aside>
+        <form class="adoption-form" id="account-form">
+          <div class="form-grid">
+            <div class="field"><label for="account-name">Your name *</label><input id="account-name" name="name" required autocomplete="name" placeholder="Full name"></div>
+            <div class="field"><label for="account-email">Email *</label><input id="account-email" name="email" required type="email" autocomplete="email" placeholder="you@example.com"></div>
+            <div class="field"><label for="account-password">Password *</label><input id="account-password" name="password" required type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></div>
+            <div class="field"><label for="account-phone">Phone (optional)</label><input id="account-phone" name="phone" type="tel" autocomplete="tel"></div>
+            <div class="field"><label for="account-city">City / town *</label><input id="account-city" name="city" required autocomplete="address-level2"></div>
+            <div class="field"><label for="account-type">I want to… *</label><select id="account-type" name="account_type" required><option value="adopter">Adopt a cat</option><option value="publisher">Publish cats for adoption</option><option value="both">Both</option></select></div>
+            <div class="field adoption-only"><label for="home-type">Your home *</label><select id="home-type" name="home_type"><option value="">Select one</option><option>House</option><option>Apartment / flat</option><option>Other</option></select></div>
+            <div class="field adoption-only"><label for="housing-status">Housing situation *</label><select id="housing-status" name="housing_status"><option value="">Select one</option><option>I own my home</option><option>I rent and have permission for a cat</option><option>I’m confirming permission</option></select></div>
+            <div class="field adoption-only"><label for="household">Who lives at home?</label><input id="household" name="household" placeholder="Adults, children, other pets"></div>
+            <div class="field adoption-only"><label for="experience">Experience with cats</label><select id="experience" name="cat_experience"><option value="">Select one</option><option>First-time cat guardian</option><option>I’ve cared for cats before</option><option>I have cats at home</option></select></div>
+            <div class="field adoption-only full"><label for="safety">How will you keep a cat safe at home? *</label><textarea id="safety" name="safety_plan" placeholder="Secure windows and balconies, other pets, and a quiet settling-in space."></textarea></div>
+            <div class="field adoption-only full"><label for="why-adopt">Why do you want to adopt? *</label><textarea id="why-adopt" name="adoption_reason" placeholder="Tell us about the care and lifelong commitment you can offer."></textarea></div>
+            <label class="check-row adoption-only field full"><input id="adoption-commitment" type="checkbox" name="commitment"><span>I understand adoption is a long-term commitment, and I’m ready to provide care, patience, and veterinary attention throughout a cat’s life. *</span></label>
+            <div class="field full"><button class="pill-button form-submit" type="submit">Create account <span aria-hidden="true">→</span></button><div class="form-message" id="account-message" role="status"></div><p style="margin:12px 0 0;font-size:12px;color:var(--muted)">Already have an account? <button type="button" class="text-link" id="open-login" style="border:0;background:none;padding:0">Sign in</button></p></div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="report-cta">
+      <div class="wrap">
+        <div class="report-card">
+          <div><p class="eyebrow">Be someone’s good news</p><h2>Have a local cat to share?</h2><p>Post a missing-cat notice or a street-cat sighting with the area and details that could help.</p></div>
+          <div class="report-actions"><button class="pill-button secondary" type="button" data-open-report="lost">Report a lost cat</button><button class="pill-button secondary" type="button" data-open-listing>List a cat for adoption</button><button class="pill-button" type="button" data-open-report="sighting">Share a street-cat sighting <span aria-hidden="true">→</span></button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">♡</span>yourkitty</a>
+      <p>Made with care for cats, their people, and the places they call home.</p>
+      <div class="footer-links"><a href="#promise">Our promise</a><a href="#community">Community board</a><a href="#application">Adopt</a></div>
+    </div>
+  </footer>
+
+  <dialog id="report-dialog" aria-labelledby="report-title">
+    <div class="dialog-inner">
+      <div class="dialog-top"><div><p class="eyebrow">Your local community</p><h2 id="report-title">Share a cat report</h2></div><button class="dialog-close" type="button" aria-label="Close dialog">×</button></div>
+      <form class="report-form" id="report-form">
+        <div class="field"><label for="report-type">What are you reporting? *</label><select id="report-type" name="type" required><option value="lost">A lost cat</option><option value="sighting">A street cat sighting</option></select></div>
+        <div class="field"><label for="report-cat-name">Cat’s name or description *</label><input id="report-cat-name" name="description" required placeholder="Color, markings, collar, name if known"></div>
+        <div class="field"><label for="report-details">When and what happened? *</label><textarea id="report-details" name="details" required placeholder="Date, time, direction of travel, and any helpful details"></textarea></div>
+        <div class="field" id="report-location-field"><label for="report-place">City and nearby location *</label><input id="report-place" name="place" required placeholder="City, neighborhood, nearest landmark"></div>
+        <p id="sighting-location-help" class="subtle" style="font-size:12px;margin:0">Street sightings are public. Use a nearby landmark, not a private home address.</p>
+        <button class="pill-button secondary" id="capture-report-location" type="button">Use my current location</button>
+        <label class="check-row"><input type="checkbox" id="report-consent" required><span>I understand this report is publicly visible. If I attach my location, its coordinates will be public. I’ll share only a safe nearby location, not a private home address.</span></label>
+        <button class="pill-button" type="submit">Post local report <span aria-hidden="true">→</span></button>
+        <div class="modal-message" id="report-message" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="login-dialog" aria-labelledby="login-title">
+    <div class="dialog-inner">
+      <div class="dialog-top"><div><p class="eyebrow">Welcome back</p><h2 id="login-title">Sign in</h2></div><button class="dialog-close" type="button" aria-label="Close dialog">×</button></div>
+      <form class="report-form" id="login-form">
+        <div class="field"><label for="login-email">Email *</label><input id="login-email" type="email" required autocomplete="email"></div>
+        <div class="field"><label for="login-password">Password *</label><input id="login-password" type="password" required autocomplete="current-password"></div>
+        <button class="pill-button" type="submit">Sign in</button>
+        <div class="modal-message" id="login-message" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="listing-dialog" aria-labelledby="listing-title">
+    <div class="dialog-inner">
+      <div class="dialog-top"><div><p class="eyebrow">Help a cat find a home</p><h2 id="listing-title">List a cat for adoption</h2></div><button class="dialog-close" type="button" aria-label="Close dialog">×</button></div>
+      <form class="report-form" id="listing-form">
+        <div class="field"><label for="listing-name">Cat’s name *</label><input id="listing-name" name="name" required></div>
+        <div class="field"><label for="listing-age">Age</label><input id="listing-age" name="age" placeholder="e.g. 2 years"></div>
+        <div class="field"><label for="listing-location">City and general area *</label><input id="listing-location" name="location" required><button class="pill-button secondary" id="capture-listing-location" type="button">Use my current location</button></div>
+        <div class="field"><label for="listing-description">Personality, needs, and adoption details *</label><textarea id="listing-description" name="description" required></textarea></div>
+        <div class="field"><label for="listing-image">Photo URL (optional)</label><input id="listing-image" name="image_url" type="url" placeholder="https://..."></div>
+        <button class="pill-button" type="submit">Publish adoption listing</button>
+        <div class="modal-message" id="listing-message" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="application-dialog" aria-labelledby="application-title">
+    <div class="dialog-inner">
+      <div class="dialog-top"><div><p class="eyebrow">A thoughtful first hello</p><h2 id="application-title">Ask about this cat</h2></div><button class="dialog-close" type="button" aria-label="Close dialog">×</button></div>
+      <form class="report-form" id="application-form">
+        <div class="field"><label for="application-note">Introduce yourself and share why this cat could be a good match *</label><textarea id="application-note" name="message" required></textarea></div>
+        <button class="pill-button" type="submit">Send adoption inquiry</button>
+        <div class="modal-message" id="application-dialog-message" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./supabase-config.js"></script>
+  <script>
+    const portuguese = {
+      "Main navigation": "Navegação principal",
+      "Language": "Idioma",
+      "yourkitty home": "Início do yourkitty",
+      "Close dialog": "Fechar janela",
+      "Open menu": "Abrir menu",
+      "Close menu": "Fechar menu",
+      "Meet the cats": "Conheça os gatos",
+      "Community board": "Mural da comunidade",
+      "Our promise": "Nosso compromisso",
+      "Start an application": "Começar inscrição",
+      "Sign in / create account": "Entrar / criar conta",
+      "Sign out": "Sair",
+      "Your yourkitty account": "Sua conta yourkitty",
+      "Join a caring community.": "Faça parte de uma comunidade que cuida.",
+      "Create an account to adopt a cat or publish cats for adoption. People can also post street-cat sightings without an account.": "Crie uma conta para adotar ou publicar gatos para adoção. Qualquer pessoa também pode avisar sobre gatos vistos na rua, sem criar conta.",
+      "Use an email you control and a strong password. Adoption and home details are visible only to you and the adoption organizations you choose to contact.": "Use um e-mail seu e uma senha forte. Os dados da sua casa e de adoção ficam privados; só serão compartilhados com a organização de adoção que você escolher contatar.",
+      "Your phone and email stay private. Street sightings are public.": "Seu telefone e e-mail ficam privados. Avistamentos de gatos são públicos.",
+      "Your name *": "Seu nome *",
+      "Password *": "Senha *",
+      "At least 8 characters": "Pelo menos 8 caracteres",
+      "Phone (optional)": "Telefone (opcional)",
+      "City / town *": "Cidade *",
+      "I want to… *": "Quero… *",
+      "Adopt a cat": "Adotar um gato",
+      "Publish cats for adoption": "Publicar gatos para adoção",
+      "Both": "As duas coisas",
+      "How will you keep a cat safe at home? *": "Como manterá o gato seguro em casa? *",
+      "Secure windows and balconies, other pets, and a quiet settling-in space.": "Conte sobre telas em janelas e sacadas, outros animais e um espaço tranquilo para adaptação.",
+      "Why do you want to adopt? *": "Por que quer adotar? *",
+      "Tell us about the care and lifelong commitment you can offer.": "Conte sobre os cuidados e o compromisso para a vida toda que pode oferecer.",
+      "Create account": "Criar conta",
+      "Already have an account?": "Já tem uma conta?",
+      "Sign in": "Entrar",
+      "Welcome back": "Boas-vindas de volta",
+      "Help a cat find a home": "Ajude um gato a encontrar um lar",
+      "List a cat for adoption": "Anunciar gato para adoção",
+      "Share a street-cat sighting": "Avisar sobre gato visto na rua",
+      "Cat’s name *": "Nome do gato *",
+      "Age": "Idade",
+      "e.g. 2 years": "ex.: 2 anos",
+      "City and general area *": "Cidade e região *",
+      "Personality, needs, and adoption details *": "Personalidade, necessidades e detalhes da adoção *",
+      "Photo URL (optional)": "Link da foto (opcional)",
+      "Publish adoption listing": "Publicar anúncio de adoção",
+      "Ask about this cat →": "Perguntar sobre este gato →",
+      "A thoughtful first hello": "Um primeiro contato com carinho",
+      "Ask about this cat": "Perguntar sobre este gato",
+      "Introduce yourself and share why this cat could be a good match *": "Apresente-se e conte por que este gato pode combinar com você *",
+      "Send adoption inquiry": "Enviar mensagem de adoção",
+      "Use my current location": "Usar minha localização atual",
+      "Street sightings are public. Use a nearby landmark, not a private home address.": "Avistamentos de gatos na rua são públicos. Informe um ponto próximo, nunca um endereço residencial particular.",
+      "I understand this report is publicly visible. For a street sighting, I’ll share only a safe nearby location, not a private home address.": "Entendo que este aviso será público. Para um avistamento, compartilharei apenas um local próximo e seguro, nunca um endereço residencial particular.",
+      "I understand this report is publicly visible. If I attach my location, its coordinates will be public. I’ll share only a safe nearby location, not a private home address.": "Entendo que este aviso será público. Se eu anexar minha localização, as coordenadas serão públicas. Compartilharei apenas um local próximo e seguro, nunca um endereço residencial particular.",
+      "Create a publisher account or sign in before listing a cat.": "Crie uma conta de anunciante ou entre para anunciar um gato.",
+      "Your account is set up for adoption. Create a publisher account to post cats for adoption.": "Sua conta está configurada para adoção. Crie uma conta de anunciante para publicar gatos para adoção.",
+      "Create an adopter account or sign in before contacting a cat’s caregiver.": "Crie uma conta de adotante ou entre para falar com a pessoa responsável pelo gato.",
+      "Your account is set up to publish cats. Create an adopter account to ask about adopting.": "Sua conta está configurada para anúncios. Crie uma conta de adotante para perguntar sobre uma adoção.",
+      "No cats are listed for adoption yet. Sign in to publish the first listing.": "Ainda não há gatos anunciados para adoção. Entre para publicar o primeiro anúncio.",
+      "No community reports yet. Share a report to help a cat in your area.": "Ainda não há avisos da comunidade. Compartilhe um aviso para ajudar um gato da sua região.",
+      "Couldn’t load listings. Check that the Supabase schema has been run and the project is configured.": "Não foi possível carregar os anúncios. Confira se o esquema do Supabase foi executado e se o projeto está configurado.",
+      "Create your account to report a lost cat. Street-cat sightings can be posted without signing in.": "Crie uma conta para avisar sobre um gato perdido. Avistamentos de gatos na rua podem ser publicados sem entrar.",
+      "Create your account or sign in to publish a lost-cat report.": "Crie uma conta ou entre para avisar sobre um gato perdido.",
+      "Your browser couldn’t share your location. Enter a nearby landmark instead.": "Não foi possível acessar sua localização. Informe um ponto de referência próximo.",
+      "Could not get your location. Please enter the city and a nearby landmark.": "Não foi possível obter sua localização. Informe a cidade e um ponto de referência próximo.",
+      "Location added. Coordinates will be visible with this public report.": "Localização adicionada. As coordenadas ficarão visíveis neste aviso público.",
+      "Location added. Coordinates will be visible in this public listing.": "Localização adicionada. As coordenadas ficarão visíveis neste anúncio público.",
+      "Account created. Check your email to confirm your address before signing in.": "Conta criada. Confirme seu e-mail antes de entrar.",
+      "Account created and signed in.": "Conta criada e acesso iniciado.",
+      "You’re signed in.": "Você entrou na sua conta.",
+      "Signed out.": "Você saiu da sua conta.",
+      "Cat listing published.": "Anúncio do gato publicado.",
+      "Cat listing published, but the list could not refresh. Reload the page to see it.": "O anúncio do gato foi publicado, mas a lista não pôde ser atualizada. Recarregue a página para vê-lo.",
+      "Report published.": "Aviso publicado.",
+      "Adoption inquiry sent.": "Mensagem de adoção enviada.",
+      "Could not create your account.": "Não foi possível criar sua conta.",
+      "Could not sign in.": "Não foi possível entrar.",
+      "Could not sign out.": "Não foi possível sair da conta.",
+      "Could not publish this listing.": "Não foi possível publicar este anúncio.",
+      "Could not publish this report.": "Não foi possível publicar este aviso.",
+      "Could not send this inquiry.": "Não foi possível enviar esta mensagem.",
+      "Please sign in again before continuing.": "Entre novamente para continuar.",
+      "The cat is no longer available.": "Este gato não está mais disponível.",
+      "Missing project setup": "Configuração do projeto ausente",
+      "Could not connect to Supabase.": "Não foi possível conectar ao Supabase.",
+      "km away": "km de distância",
+      "Lost cat": "Gato perdido",
+      "Street-cat sighting": "Avistamento de gato na rua",
+      "City and nearby location *": "Cidade e local próximo *",
+      "City, neighborhood, nearest landmark": "Cidade, bairro, ponto de referência próximo",
+      "Cat’s name or description *": "Nome ou descrição do gato *",
+      "What happened and when? *": "O que aconteceu e quando? *",
+      "Post local report": "Publicar aviso local",
+      "Good things happen when we care": "Coisas boas acontecem quando cuidamos",
+      "A little love": "Um pouco de amor",
+      "goes a ": "faz muita ",
+      "long way.": "diferença.",
+      "Find a cat who feels like home, help a lost one find their way back, or be the kind neighbor who spots a cat in need.": "Encontre um gato que combine com você, ajude um gato perdido a voltar para casa ou seja a pessoa que percebe quando um gato precisa de ajuda.",
+      "Find your kindred cat": "Encontre seu companheiro",
+      "Help a cat nearby": "Ajude um gato por perto",
+      "Local care, thoughtful matches, happier homes.": "Cuidado local, encontros especiais e lares mais felizes.",
+      "A home": "Um lar",
+      "for every": "para cada",
+      "heart ♡": "coração ♡",
+      "Meet your match": "Encontre seu par",
+      "They’re closer than you think": "Ele pode estar mais perto do que você imagina",
+      "Your neighborhood, your next best friend.": "Seu bairro, seu próximo melhor amigo.",
+      "Detecting your location… Your browser may ask for permission.": "Detectando sua localização… Seu navegador pode pedir permissão.",
+      "Location detected. Shared listings are loaded from yourkitty.": "Localização detectada. Os anúncios compartilhados são carregados do yourkitty.",
+      "Location detection isn’t supported by this browser. Listings will still appear, but can’t be sorted by distance.": "Este navegador não permite detectar sua localização. Os anúncios continuam visíveis, mas não podem ser ordenados por distância.",
+      "Location permission is off. Allow it in your browser settings to sort nearby listings first.": "A permissão de localização está desativada. Ative-a nas configurações do navegador para ordenar os anúncios por proximidade.",
+      "Your location isn’t available right now. Listings are shown without distance sorting.": "Sua localização não está disponível agora. Os anúncios são exibidos sem ordenação por distância.",
+      "Location detection timed out. Listings are shown without distance sorting.": "A detecção de localização demorou demais. Os anúncios são exibidos sem ordenação por distância.",
+      "Location detected. Nearby listings appear first.": "Localização detectada. Os anúncios mais próximos aparecem primeiro.",
+      "The beginning of a beautiful thing": "O começo de algo bonito",
+      "Someone’s waiting": "Tem alguém esperando",
+      "to meet you.": "para conhecer você.",
+      "Every cat has a little story. Get to know the ones looking for a patient, loving home near you.": "Todo gato tem sua história. Conheça os que procuram um lar paciente e cheio de carinho perto de você.",
+      "your area": "sua região",
+      "Adoption is a promise": "Adotar é um compromisso",
+      "Love is the start.": "O amor é o começo.",
+      "Care is the commitment.": "Cuidar é o compromisso.",
+      "A good match puts the cat’s lifelong wellbeing first. We’ll ask a few thoughtful questions—not to judge, but to help you prepare for the real, lovely work of caring for a cat.": "Uma boa adoção prioriza o bem-estar do gato por toda a vida. Faremos algumas perguntas com carinho, não para julgar, mas para ajudar você a se preparar para cuidar dele de verdade.",
+      "A safe, settled space": "Um espaço seguro e tranquilo",
+      "Windows, balconies, other pets, and a quiet room to decompress.": "Janelas, sacadas, outros animais e um cômodo tranquilo para adaptação.",
+      "Care for every season": "Cuidado em todas as fases",
+      "Time, patience, routine veterinary care, and a plan for the years ahead.": "Tempo, paciência, cuidados veterinários e um plano para os próximos anos.",
+      "A thoughtful introduction": "Uma apresentação cuidadosa",
+      "Slow introductions help cats and people feel comfortable together.": "Uma aproximação gradual ajuda gatos e pessoas a se sentirem confortáveis.",
+      "Support beyond day one": "Apoio depois da chegada",
+      "Ask questions, get ready, and build confidence at your own pace.": "Tire dúvidas, prepare-se e ganhe confiança no seu ritmo.",
+      "Neighbors looking out for neighbors": "Vizinhos cuidando uns dos outros",
+      "A small sighting": "Um pequeno aviso",
+      "can change everything.": "pode mudar tudo.",
+      "See a missing cat or a cat who might need help? Share what you know so people nearby can respond.": "Viu um gato perdido ou que pode precisar de ajuda? Compartilhe o que sabe para que pessoas próximas possam agir.",
+      "Community report type": "Tipo de aviso da comunidade",
+      "Lost cats": "Gatos perdidos",
+      "Street cat sightings": "Avistamentos de gatos de rua",
+      "All local reports": "Todos os avisos locais",
+      "These are sample reports for this demo; choosing a location does not verify or fetch live local listings. A production service needs a shared, moderated database. For an injured or immediately endangered cat, contact a local veterinarian, animal control, or rescue organization. Please don’t approach a frightened or unfamiliar cat if it isn’t safe.": "Estes são avisos de exemplo; a localização não verifica nem busca anúncios locais em tempo real. Um serviço real precisa de uma base de dados compartilhada e moderada. Se o gato estiver ferido ou em perigo imediato, procure um veterinário, serviço municipal ou organização de resgate local. Não se aproxime se isso não for seguro.",
+      "A good match takes a little care": "Uma boa adoção começa com cuidado",
+      "Thoughtful, from": "Com cuidado, desde",
+      "the very first hello.": "o primeiro encontro.",
+      "Tell us about your home": "Conte sobre sua casa",
+      "Share your household, daily routine, pet experience, and how you’ll keep your cat safe.": "Conte sobre quem mora com você, sua rotina, experiência com animais e como manterá o gato seguro.",
+      "Get to know each other": "Conheçam-se melhor",
+      "Talk through the cat’s needs, ask questions, and make sure the match feels right for everyone.": "Conversem sobre as necessidades do gato, tire dúvidas e vejam se a combinação funciona para todos.",
+      "Make room for a new life": "Prepare-se para uma nova vida",
+      "Prepare your home and welcome your cat with patience, care, and ongoing support.": "Prepare sua casa e receba o gato com paciência, carinho e apoio contínuo.",
+      "Your adoption application": "Sua inscrição para adoção",
+      "Let’s find the right fit.": "Vamos encontrar a combinação ideal.",
+      "This is a chance to help us understand your home and the life you can offer a cat. There are no perfect answers—honesty helps us make a thoughtful match.": "Queremos conhecer sua casa e entender a vida que você pode oferecer a um gato. Não há respostas perfeitas: a sinceridade ajuda a encontrar uma boa combinação.",
+      "Your information matters.": "Suas informações são importantes.",
+      "Only share information you’re comfortable providing. A real adoption program should explain how your application is reviewed, stored, and who can access it.": "Compartilhe apenas o que se sentir confortável em informar. Um programa de adoção deve explicar como sua inscrição é analisada, armazenada e quem pode acessá-la.",
+      "Your name *": "Seu nome *",
+      "Full name": "Nome completo",
+      "Email *": "E-mail *",
+      "Which cat caught your eye?": "Qual gato chamou sua atenção?",
+      "I’m open to a match": "Aceito conhecer outros gatos",
+      "Your home *": "Sua moradia *",
+      "Select one": "Selecione",
+      "House": "Casa",
+      "Apartment / flat": "Apartamento",
+      "Other": "Outro",
+      "Housing situation *": "Sua situação de moradia *",
+      "I own my home": "Sou proprietário(a)",
+      "I rent and have permission for a cat": "Alugo e tenho autorização para ter gato",
+      "I’m confirming permission": "Estou confirmando a autorização",
+      "Who lives at home?": "Quem mora na casa?",
+      "Adults, children, other pets": "Adultos, crianças, outros animais",
+      "Experience with cats": "Experiência com gatos",
+      "First-time cat guardian": "Será meu primeiro gato",
+      "I’ve cared for cats before": "Já cuidei de gatos",
+      "I have cats at home": "Já tenho gatos em casa",
+      "How will you keep a cat safe in your home? *": "Como você manterá o gato seguro em casa? *",
+      "For example: secure windows and balconies, indoor / outdoor plans, introducing other pets, and a quiet settling-in space.": "Por exemplo: proteção em janelas e sacadas, planos para acesso à rua, apresentação a outros animais e um espaço tranquilo para adaptação.",
+      "Why are you hoping to adopt, and what would day-to-day care look like? *": "Por que você quer adotar e como será o cuidado diário? *",
+      "Tell us what makes you ready, how a cat fits your routine, and how you’ll plan for their needs over time.": "Conte por que está preparado(a), como o gato se encaixa na sua rotina e como planeja atender às necessidades dele ao longo do tempo.",
+      "I understand adoption is a long-term commitment, and I’m ready to provide care, patience, and veterinary attention throughout a cat’s life. *": "Entendo que adotar é um compromisso de longo prazo e estou preparado(a) para oferecer cuidado, paciência e atenção veterinária durante toda a vida do gato. *",
+      "Send my application": "Enviar minha inscrição",
+      "Thank you for sharing what a caring home looks like for you. This demo doesn’t send or store applications; connect an adoption organization’s secure application service before collecting real personal information.": "Obrigado por contar como seria um lar carinhoso para você. Esta demonstração não envia nem armazena inscrições. Antes de coletar dados pessoais, conecte um serviço seguro de uma organização de adoção.",
+      "Be someone’s good news": "Seja uma boa notícia para alguém",
+      "Have a local cat to share?": "Tem um gato da região para avisar?",
+      "Post a missing-cat notice or a street-cat sighting with the area and details that could help.": "Avise sobre um gato perdido ou avistado na rua, incluindo o local e detalhes úteis.",
+      "Share a sighting": "Compartilhar avistamento",
+      "Made with care for cats, their people, and the places they call home.": "Feito com carinho para os gatos, suas famílias e os lugares que chamam de lar.",
+      "Adopt": "Adote",
+      "Your local community": "Sua comunidade",
+      "Share a cat report": "Compartilhe um aviso sobre gato",
+      "What are you reporting? *": "O que você quer avisar? *",
+      "A lost cat": "Um gato perdido",
+      "A street cat sighting": "Um gato avistado na rua",
+      "Cat’s name or description *": "Nome ou descrição do gato *",
+      "Color, markings, collar, name if known": "Cor, marcas, coleira e nome, se souber",
+      "Town and nearby location *": "Cidade e local próximo *",
+      "Town, neighborhood, nearest landmark": "Cidade, bairro, ponto de referência próximo",
+      "When and what happened? *": "Quando e o que aconteceu? *",
+      "Date, time, direction of travel, and any helpful details": "Data, horário, para onde foi e outros detalhes úteis",
+      "Contact email (optional)": "E-mail para contato (opcional)",
+      "I’ll share only information I’m comfortable making public, and I understand that this public report does not contact emergency or animal services.": "Vou compartilhar apenas informações que aceito tornar públicas e entendo que este aviso público não contata serviços de emergência ou de proteção animal.",
+      "Post local report": "Publicar aviso local",
+      "Your report is now visible on this page as a demo. It hasn’t been sent to local residents, shelters, or rescue services.": "Seu aviso agora aparece nesta página de demonstração. Ele não foi enviado a moradores, abrigos ou serviços de resgate.",
+      "No lost-cat reports yet. If you have seen a cat who needs help, share a local report.": "Ainda não há avisos de gatos perdidos. Se viu um gato precisando de ajuda, compartilhe um aviso local.",
+      "No street-cat reports yet. If you have seen a cat who needs help, share a local report.": "Ainda não há avisos de gatos avistados na rua. Se viu um gato precisando de ajuda, compartilhe um aviso local.",
+      "Share a report →": "Compartilhar aviso →",
+      "Looking for a home": "Procurando um lar",
+      "Calm": "Tranquilo",
+      "Indoor": "Dentro de casa",
+      "Solo home": "Lar sem outros gatos",
+      "Playful": "Brincalhão",
+      "Kitten": "Filhote",
+      "Patient home": "Lar paciente",
+      "Easygoing": "Dócil",
+      "Adult": "Adulto",
+      "Cozy naps": "Sonecas aconchegantes",
+      "Sample listing": "Anúncio de exemplo",
+      "A friendly ginger and white cat": "Um simpático gato ruivo e branco",
+      "A curious young kitten": "Um filhote curioso",
+      "A relaxed cat resting comfortably": "Um gato tranquilo descansando",
+      "A soft-hearted little soul who likes sunny windowsills, slow blinks, and getting to know you at her own pace.": "Uma alma doce que gosta de janelas ensolaradas, piscadinhas e de conhecer você no próprio ritmo.",
+      "All big paws and bigger curiosity. Pip is looking for a safe home ready for kitten energy and gentle guidance.": "Patonas e muita curiosidade. Pip procura um lar seguro, preparado para a energia de filhote e uma orientação carinhosa.",
+      "A lovely companion who appreciates a predictable routine, a cozy bed, and kind company nearby.": "Uma ótima companhia que gosta de rotina, uma caminha aconchegante e pessoas queridas por perto.",
+      "Female": "Fêmea",
+      "Male": "Macho",
+      "years": "anos",
+      "2 years": "2 anos",
+      "5 months": "5 meses",
+      "4 years": "4 anos",
+      "lost cat": "gato perdido",
+      "local sighting": "avistamento local",
+      " — lost cat": " — gato perdido",
+      " — local sighting": " — avistamento local",
+      "Report a lost cat": "Avisar sobre gato perdido",
+      "Share a sighting": "Compartilhar avistamento",
+      "Share a cat report": "Compartilhe um aviso sobre gato",
+      "Meet Miso →": "Conheça Miso →",
+      "Meet Pip →": "Conheça Pip →",
+      "Meet Olive →": "Conheça Olive →",
+      "Posted recently": "Publicado recentemente",
+      "Posted yesterday": "Publicado ontem",
+      "Seen this morning": "Visto hoje de manhã",
+      "Seen yesterday": "Visto ontem",
+      "Just shared · demo": "Acabou de ser publicado · demonstração",
+      "Luna — missing from Maple Street": "Luna — desapareceu da Rua Maple",
+      "Gray tabby with a white chest and a purple collar. Last seen near the community garden.": "Gata tigrada cinza, peito branco e coleira roxa. Vista pela última vez perto da horta comunitária.",
+      "Sample neighborhood · Sample town": "Bairro de exemplo · Cidade de exemplo",
+      "Orange cat, answers to Sunny": "Gato laranja, atende por Sunny",
+      "Friendly, medium-sized cat. Family is looking around the park and nearby blocks.": "Gato dócil, de porte médio. A família procura no parque e nas ruas próximas.",
+      "Sample park · Sample town": "Parque de exemplo · Cidade de exemplo",
+      "Shy black-and-white cat": "Gato preto e branco assustado",
+      "Spotted near the back entrance of the library. Seemed cautious but alert.": "Visto perto da entrada dos fundos da biblioteca. Parecia cauteloso, mas atento.",
+      "Library lane · Sample town": "Rua da biblioteca · Cidade de exemplo",
+      "Small cat near the bus stop": "Gato pequeno perto do ponto de ônibus",
+      "Calico, no collar noticed. Please share a sighting rather than trying to corner them.": "Gato tricolor, sem coleira aparente. Compartilhe o avistamento em vez de tentar cercá-lo.",
+      "Oak Avenue · Sample town": "Avenida Oak · Cidade de exemplo",
+      "This demo shows sample listings, not verified local reports.": "Esta demonstração exibe anúncios de exemplo, não avisos locais verificados."
+    };
+    let currentLanguage = "en";
+    let locationMessageKey = "Detecting your location… Your browser may ask for permission.";
+    let reportDialogTitleKey = "Share a cat report";
+    const originalTextNodes = new Map();
+    const originalAttributes = new Map();
+    const translate = (text) => {
+      if (currentLanguage !== "pt-BR") return text;
+      if (portuguese[text]) return portuguese[text];
+      const match = text.match(/^(\s*)([\s\S]*?)(\s*)$/);
+      if (!match) return text;
+      return `${match[1]}${portuguese[match[2]] || match[2]}${match[3]}`;
+    };
+    const applyLanguage = (language) => {
+      currentLanguage = language;
+      document.documentElement.lang = language === "pt-BR" ? "pt-BR" : "en";
+      document.title = language === "pt-BR" ? "yourkitty — Todo gato merece um lar seguro" : "yourkitty — Every cat deserves a safe place";
+      const description = document.querySelector('meta[name="description"]');
+      description.content = language === "pt-BR"
+        ? "Encontre seu novo melhor amigo, ajude gatos perdidos a voltar para suas famílias e cuide dos gatos que precisam de ajuda."
+        : "Find your new best friend, reunite lost cats with their families, and help street cats get the care they need.";
+      for (const [node, original] of originalTextNodes) {
+        if (node.isConnected) node.textContent = translate(original);
+      }
+      for (const [element, attributes] of originalAttributes) {
+        if (!element.isConnected) continue;
+        for (const [name, original] of attributes) element.setAttribute(name, translate(original));
+      }
+      renderCats();
+      renderReports();
+      if (typeof setAuthState === "function") setAuthState(currentUser, currentProfile);
+      updateLocationMessage(locationMessageKey);
+      document.querySelector("#report-title").textContent = translate(reportDialogTitleKey);
+      document.querySelector("#language-select").value = language;
+      document.querySelectorAll(".form-message.show, .modal-message.show").forEach((element) => {
+        if (element.dataset.englishMessage) {
+          element.textContent = `${translate(element.dataset.englishMessage)} ${element.dataset.errorDetail || ""}`.trim();
+        }
+      });
+    };
+    const rememberOriginalContent = () => {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (node.textContent.trim()) originalTextNodes.set(node, node.textContent);
+      }
+      document.querySelectorAll("body *").forEach((element) => {
+        const attributes = new Map();
+        for (const name of ["aria-label", "placeholder", "alt"]) {
+          if (element.hasAttribute(name)) attributes.set(name, element.getAttribute(name));
+        }
+        if (attributes.size) originalAttributes.set(element, attributes);
+      });
+    };
+
+    let cats = [];
+    let communityFilter = "lost";
+    let reports = [];
+    let currentUser = null;
+    let currentProfile = null;
+    let currentReportCoordinates = null;
+    let currentListingCoordinates = null;
+    let viewerCoordinates = null;
+    let pendingListingId = null;
+    let supabaseClient = null;
+
+    const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+    const catGrid = document.querySelector("#cat-grid");
+    const communityList = document.querySelector("#community-list");
+    const renderCats = () => {
+      catGrid.innerHTML = cats.length ? cats.map((cat) => `
+        <article class="cat-card">
+          <div class="cat-image">${cat.image_url ? `<img src="${escapeHTML(cat.image_url)}" alt="${escapeHTML(cat.name)}" loading="lazy">` : `<div class="community-icon" aria-hidden="true">🐈</div>`}<span class="cat-tag">${translate("Looking for a home")}</span></div>
+          <div class="cat-body">
+            <div class="cat-title"><div><h3>${escapeHTML(cat.name)}</h3><span>${escapeHTML(cat.age || "")}</span></div><span aria-hidden="true">♡</span></div>
+            <p>${escapeHTML(cat.description)}</p>
+            <div class="cat-footer"><small>${escapeHTML(cat.location)}${viewerCoordinates && cat.latitude != null && cat.longitude != null ? ` · ${distanceKm(viewerCoordinates, cat).toFixed(1)} ${translate("km away")}` : ""}</small><button type="button" data-listing-id="${cat.id}">${translate("Ask about this cat →")}</button></div>
+          </div>
+        </article>`).join("") : `<div class="empty-state">${translate("No cats are listed for adoption yet. Sign in to publish the first listing.")}</div>`;
+    };
+    const renderReports = () => {
+      const filtered = reports.filter((report) => communityFilter === "all" || report.type === communityFilter);
+      communityList.innerHTML = filtered.length ? filtered.map((report) => `
+        <article class="community-card ${report.type === "sighting" ? "sighting" : ""}">
+          <div class="community-icon" aria-hidden="true">${report.type === "lost" ? "♡" : "⌖"}</div>
+          <div class="community-info"><h3>${escapeHTML(report.cat_description)}</h3><p>${escapeHTML(report.details)}</p><span class="place">⌖ ${escapeHTML(report.location)}${viewerCoordinates && report.latitude != null && report.longitude != null ? ` · ${distanceKm(viewerCoordinates, report).toFixed(1)} ${translate("km away")}` : ""}</span></div>
+          <div class="community-action"><small>${escapeHTML(report.created_at ? new Intl.DateTimeFormat(currentLanguage === "pt-BR" ? "pt-BR" : "en", { dateStyle: "medium" }).format(new Date(report.created_at)) : translate(report.when))}</small><a href="#" data-report-type="${report.type}">${translate("Share a report →")}</a></div>
+        </article>`).join("") : `<div class="empty-state">${translate(communityFilter === "lost" ? "No lost-cat reports yet. If you have seen a cat who needs help, share a local report." : communityFilter === "sighting" ? "No street-cat reports yet. If you have seen a cat who needs help, share a local report." : "No community reports yet. Share a report to help a cat in your area.")}</div>`;
+      communityList.querySelectorAll("[data-report-type]").forEach((link) => link.addEventListener("click", (event) => {
+        event.preventDefault();
+        openReport(link.dataset.reportType);
+      }));
+    };
+    const showMessage = (element, text, isError = false) => {
+      const englishMessage = Object.entries(portuguese).find(([, translated]) => translated === text)?.[0] || text;
+      element.dataset.englishMessage = englishMessage;
+      element.dataset.errorDetail = "";
+      element.textContent = translate(englishMessage);
+      element.classList.add("show");
+      element.style.background = isError ? "#f8e6e5" : "";
+      element.style.color = isError ? "#8f3535" : "";
+    };
+    const showRequestError = (element, messageKey, error) => {
+      showMessage(element, translate(messageKey), true);
+      element.dataset.errorDetail = error.message || "";
+      element.textContent = `${element.textContent} ${element.dataset.errorDetail}`.trim();
+    };
+    const safely = async (label, request, element, fallbackKey) => {
+      try {
+        return await request;
+      } catch (error) {
+        console.error(`${label} failed:`, error);
+        showMessage(element, translate(fallbackKey), true);
+        element.dataset.errorDetail = error.message || "";
+        element.textContent = `${element.textContent} ${element.dataset.errorDetail}`.trim();
+        return null;
+      }
+    };
+    const distanceKm = (first, second) => {
+      const radians = (degrees) => degrees * Math.PI / 180;
+      const latitudeDelta = radians(second.latitude - first.latitude);
+      const longitudeDelta = radians(second.longitude - first.longitude);
+      const a = Math.sin(latitudeDelta / 2) ** 2
+        + Math.cos(radians(first.latitude)) * Math.cos(radians(second.latitude))
+        * Math.sin(longitudeDelta / 2) ** 2;
+      return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+    const nearestFirst = (items) => {
+      if (!viewerCoordinates) return items;
+      return items.sort((first, second) => {
+        const firstDistance = first.latitude == null || first.longitude == null
+          ? Number.POSITIVE_INFINITY
+          : distanceKm(viewerCoordinates, { latitude: first.latitude, longitude: first.longitude });
+        const secondDistance = second.latitude == null || second.longitude == null
+          ? Number.POSITIVE_INFINITY
+          : distanceKm(viewerCoordinates, { latitude: second.latitude, longitude: second.longitude });
+        return firstDistance - secondDistance;
+      });
+    };
+    const setAuthState = (user, profile = null) => {
+      currentUser = user;
+      currentProfile = profile;
+      const button = document.querySelector("#account-nav");
+      button.textContent = translate(user ? "Sign out" : "Sign in / create account");
+      button.dataset.openAccount = String(!user);
+      button.setAttribute("aria-label", user ? `${translate("Sign out")} ${user.email}` : translate("Sign in / create account"));
+    };
+    const showAccountSection = (message = "") => {
+      if (message) showMessage(document.querySelector("#account-message"), translate(message), true);
+      document.querySelector("#application").scrollIntoView({ behavior: "smooth" });
+      document.querySelector("#account-name").focus({ preventScroll: true });
+    };
+    const updateAdoptionFields = () => {
+      const needsAdopterProfile = ["adopter", "both"].includes(document.querySelector("#account-type").value);
+      document.querySelectorAll(".adoption-only").forEach((field) => {
+        field.hidden = !needsAdopterProfile;
+        field.querySelectorAll("input, select, textarea").forEach((input) => {
+          input.required = needsAdopterProfile && ["home_type", "housing_status", "safety_plan", "adoption_reason"].includes(input.name);
+          if (!needsAdopterProfile) {
+            if (input.type === "checkbox") input.checked = false;
+            else input.value = "";
+          }
+        });
+      });
+      document.querySelector("#adoption-commitment").required = needsAdopterProfile;
+    };
+    const refreshListings = async () => {
+      const { data, error } = await supabaseClient.from("cat_listings")
+        .select("id,name,age,description,location,latitude,longitude,image_url,created_at")
+        .eq("active", true).order("created_at", { ascending: false });
+      if (error) throw error;
+      cats = nearestFirst(data || []);
+      renderCats();
+    };
+    const refreshReports = async () => {
+      const { data, error } = await supabaseClient.from("community_reports")
+        .select("id,report_type,cat_description,details,location,latitude,longitude,created_at")
+        .order("created_at", { ascending: false }).limit(100);
+      if (error) throw error;
+      reports = nearestFirst((data || []).map((report) => ({ ...report, type: report.report_type })));
+      renderReports();
+    };
+    const refreshCommunity = async () => {
+      try {
+        await Promise.all([refreshListings(), refreshReports()]);
+      } catch (error) {
+        console.error("Could not load yourkitty listings:", error);
+        const message = translate("Couldn’t load listings. Check that the Supabase schema has been run and the project is configured.");
+        catGrid.innerHTML = `<div class="empty-state">${escapeHTML(message)}</div>`;
+        communityList.innerHTML = `<div class="empty-state">${escapeHTML(message)}</div>`;
+      }
+    };
+    const openLogin = () => {
+      document.querySelector("#login-message").classList.remove("show");
+      document.querySelector("#login-dialog").showModal();
+    };
+    const openListing = () => {
+      if (!currentUser) {
+        showAccountSection("Create a publisher account or sign in before listing a cat.");
+        return;
+      }
+      if (!["publisher", "both"].includes(currentProfile?.account_type || currentUser.user_metadata?.account_type)) {
+        showAccountSection("Your account is set up for adoption. Create a publisher account to post cats for adoption.");
+        return;
+      }
+      currentListingCoordinates = null;
+      document.querySelector("#listing-message").classList.remove("show");
+      document.querySelector("#listing-dialog").showModal();
+    };
+    const openApplication = (listingId) => {
+      pendingListingId = listingId;
+      if (!currentUser) {
+        showAccountSection("Create an adopter account or sign in before contacting a cat’s caregiver.");
+        return;
+      }
+      if (!["adopter", "both"].includes(currentProfile?.account_type || currentUser.user_metadata?.account_type)) {
+        showAccountSection("Your account is set up to publish cats. Create an adopter account to ask about adopting.");
+        return;
+      }
+      document.querySelector("#application-dialog-message").classList.remove("show");
+      document.querySelector("#application-dialog").showModal();
+    };
+    const detectLocation = () => {
+      if (!navigator.geolocation) {
+        updateLocationMessage("Location detection isn’t supported by this browser. Listings will still appear, but can’t be sorted by distance.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          viewerCoordinates = { latitude: coords.latitude, longitude: coords.longitude };
+          updateLocationMessage("Location detected. Nearby listings appear first.");
+          void refreshCommunity();
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            updateLocationMessage("Location permission is off. Allow it in your browser settings to sort nearby listings first.");
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            updateLocationMessage("Your location isn’t available right now. Listings are shown without distance sorting.");
+          } else {
+            updateLocationMessage("Location detection timed out. Listings are shown without distance sorting.");
+          }
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    };
+    const openReport = (type) => {
+      if (type === "lost" && !currentUser) {
+        showAccountSection("Create your account or sign in to publish a lost-cat report.");
+        return;
+      }
+      const dialog = document.querySelector("#report-dialog");
+      document.querySelector("#report-type").value = type;
+      reportDialogTitleKey = type === "lost" ? "Report a lost cat" : "Share a sighting";
+      currentReportCoordinates = null;
+      document.querySelector("#report-message").classList.remove("show");
+      document.querySelector("#report-title").textContent = translate(reportDialogTitleKey);
+      dialog.showModal();
+    };
+    const updateLocationMessage = (message) => {
+      locationMessageKey = message;
+      document.querySelector("#location-status").textContent = translate(message);
+    };
+
+    renderCats();
+    renderReports();
+    rememberOriginalContent();
+    const browserLanguage = navigator.languages?.[0] || navigator.language;
+    let preferredLanguage = browserLanguage.toLowerCase().startsWith("pt") ? "pt-BR" : "en";
+    try {
+      const savedLanguage = localStorage.getItem("yourkitty-language");
+      if (savedLanguage === "en" || savedLanguage === "pt-BR") preferredLanguage = savedLanguage;
+    } catch (error) {
+      if (!(error instanceof DOMException)) throw error;
+    }
+    applyLanguage(preferredLanguage);
+    detectLocation();
+    updateAdoptionFields();
+    if (window.supabase?.createClient && window.YOURKITTY_SUPABASE_CONFIG?.url && window.YOURKITTY_SUPABASE_CONFIG?.anonKey) {
+      try {
+        supabaseClient = window.supabase.createClient(
+          window.YOURKITTY_SUPABASE_CONFIG.url,
+          window.YOURKITTY_SUPABASE_CONFIG.anonKey
+        );
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+          setAuthState(session?.user || null, null);
+          if (session?.user) {
+            void supabaseClient.from("profiles").select("account_type").eq("id", session.user.id).maybeSingle()
+              .then(({ data, error }) => {
+                if (error) throw error;
+                currentProfile = data;
+                setAuthState(session.user, data);
+                if (pendingListingId) {
+                  const listingId = pendingListingId;
+                  pendingListingId = null;
+                  openApplication(listingId);
+                }
+              })
+              .catch((error) => {
+                console.error("Could not load account profile:", error);
+                showAccountSection("Could not load your account. Check that the Supabase schema setup completed.");
+              });
+          }
+          void refreshCommunity();
+        });
+        supabaseClient.auth.getSession().then(({ data, error }) => {
+          if (error) throw error;
+          if (!data.session) setAuthState(null);
+          void refreshCommunity();
+        }).catch((error) => {
+          console.error("Could not initialize Supabase session:", error);
+          updateLocationMessage("Could not connect to Supabase.");
+        });
+      } catch (error) {
+        console.error("Could not initialize Supabase:", error);
+        updateLocationMessage("Could not connect to Supabase.");
+      }
+    } else {
+      updateLocationMessage("Missing project setup");
+      communityList.innerHTML = `<div class="empty-state">${translate("Missing project setup")}</div>`;
+    }
+    document.querySelector("#language-select").addEventListener("change", (event) => {
+      const language = event.currentTarget.value;
+      applyLanguage(language);
+      try {
+        localStorage.setItem("yourkitty-language", language);
+      } catch (error) {
+        if (!(error instanceof DOMException)) throw error;
+      }
+    });
+    document.querySelectorAll(".tab-button").forEach((button) => button.addEventListener("click", () => {
+      communityFilter = button.dataset.filter;
+      document.querySelectorAll(".tab-button").forEach((tab) => {
+        const selected = tab === button;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+      });
+      renderReports();
+    }));
+    document.querySelector("#cat-grid").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-listing-id]");
+      if (button) openApplication(button.dataset.listingId);
+    });
+    document.querySelector("#account-type").addEventListener("change", updateAdoptionFields);
+    document.querySelector("#account-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supabaseClient) {
+        showMessage(document.querySelector("#account-message"), translate("Could not connect to Supabase."), true);
+        return;
+      }
+      const form = event.currentTarget;
+      const fields = new FormData(form);
+      const accountType = String(fields.get("account_type"));
+      const metadata = {
+        full_name: String(fields.get("name")),
+        phone: String(fields.get("phone") || ""),
+        city: String(fields.get("city")),
+        account_type: accountType,
+        home_type: String(fields.get("home_type") || ""),
+        housing_status: String(fields.get("housing_status") || ""),
+        household: String(fields.get("household") || ""),
+        cat_experience: String(fields.get("cat_experience") || ""),
+        safety_plan: String(fields.get("safety_plan") || ""),
+        adoption_reason: String(fields.get("adoption_reason") || "")
+      };
+      const response = await safely("Account creation", supabaseClient.auth.signUp({
+        email: String(fields.get("email")),
+        password: String(fields.get("password")),
+        options: { data: metadata }
+      }), document.querySelector("#account-message"), "Could not create your account.");
+      if (!response) return;
+      const { data, error } = response;
+      if (error) {
+        console.error("Account creation failed:", error);
+        showRequestError(document.querySelector("#account-message"), "Could not create your account.", error);
+        return;
+      }
+      if (data.session) {
+        setAuthState(data.user, { account_type: accountType });
+        showMessage(document.querySelector("#account-message"), translate("Account created and signed in."));
+      } else {
+        showMessage(document.querySelector("#account-message"), translate("Account created. Check your email to confirm your address before signing in."));
+      }
+      form.reset();
+      updateAdoptionFields();
+    });
+    document.querySelectorAll("[data-open-report]").forEach((button) => button.addEventListener("click", () => openReport(button.dataset.openReport)));
+    document.querySelectorAll(".dialog-close").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
+    document.querySelectorAll("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => {
+      if (event.target === event.currentTarget) event.currentTarget.close();
+    }));
+    document.querySelector("#account-nav").addEventListener("click", async () => {
+      if (currentUser) {
+        if (!supabaseClient) {
+          showMessage(document.querySelector("#account-message"), translate("Could not connect to Supabase."), true);
+          return;
+        }
+        const response = await safely("Sign-out", supabaseClient.auth.signOut(), document.querySelector("#account-message"), "Could not sign out.");
+        if (!response) return;
+        const { error } = response;
+        if (error) {
+          console.error("Sign-out failed:", error);
+          updateLocationMessage(error.message);
+          return;
+        }
+        setAuthState(null);
+        showMessage(document.querySelector("#account-message"), translate("Signed out."));
+      } else {
+        showAccountSection();
+      }
+    });
+    document.querySelector("#open-login").addEventListener("click", openLogin);
+    document.querySelectorAll("[data-open-listing]").forEach((button) => button.addEventListener("click", openListing));
+    document.querySelector("#login-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supabaseClient) {
+        showMessage(document.querySelector("#login-message"), translate("Could not connect to Supabase."), true);
+        return;
+      }
+      const fields = new FormData(event.currentTarget);
+      const response = await safely("Sign-in", supabaseClient.auth.signInWithPassword({
+        email: String(fields.get("email")),
+        password: String(fields.get("password"))
+      }), document.querySelector("#login-message"), "Could not sign in.");
+      if (!response) return;
+      const { data, error } = response;
+      if (error) {
+        console.error("Sign-in failed:", error);
+        showRequestError(document.querySelector("#login-message"), "Could not sign in.", error);
+        return;
+      }
+      setAuthState(data.user);
+      document.querySelector("#login-dialog").close();
+      showMessage(document.querySelector("#account-message"), translate("You’re signed in."));
+      if (pendingListingId) {
+        const listingId = pendingListingId;
+        pendingListingId = null;
+        openApplication(listingId);
+      }
+    });
+    document.querySelector("#capture-report-location").addEventListener("click", () => {
+      const message = document.querySelector("#report-message");
+      if (!navigator.geolocation) {
+        showMessage(message, translate("Your browser couldn’t share your location. Enter a nearby landmark instead."), true);
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          currentReportCoordinates = { latitude: coords.latitude, longitude: coords.longitude };
+          showMessage(message, translate("Location added. Coordinates will be visible with this public report."));
+        },
+        () => showMessage(message, translate("Could not get your location. Please enter the city and a nearby landmark."), true),
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+    document.querySelector("#capture-listing-location").addEventListener("click", () => {
+      const message = document.querySelector("#listing-message");
+      if (!navigator.geolocation) {
+        showMessage(message, translate("Your browser couldn’t share your location. Enter a nearby landmark instead."), true);
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          currentListingCoordinates = { latitude: coords.latitude, longitude: coords.longitude };
+          showMessage(message, translate("Location added. Coordinates will be visible in this public listing."));
+        },
+        () => showMessage(message, translate("Could not get your location. Please enter the city and a nearby landmark."), true),
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+      );
+    });
+    document.querySelector("#report-type").addEventListener("change", (event) => {
+      if (event.currentTarget.value === "lost" && !currentUser) {
+        event.currentTarget.value = "sighting";
+        document.querySelector("#report-dialog").close();
+        showAccountSection("Create your account or sign in to publish a lost-cat report.");
+      }
+    });
+    document.querySelector("#report-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!supabaseClient) {
+        showMessage(document.querySelector("#report-message"), translate("Could not connect to Supabase."), true);
+        return;
+      }
+      const fields = new FormData(event.currentTarget);
+      const type = String(fields.get("type"));
+      if (type === "lost" && !currentUser) {
+        showMessage(document.querySelector("#report-message"), translate("Create your account or sign in to publish a lost-cat report."), true);
+        return;
+      }
+      const payload = {
+        report_type: type,
+        cat_description: String(fields.get("description")),
+        details: String(fields.get("details")),
+        location: String(fields.get("place")),
+        latitude: currentReportCoordinates?.latitude ?? null,
+        longitude: currentReportCoordinates?.longitude ?? null,
+        owner_id: type === "lost" ? currentUser.id : null,
+        contact_email: null
+      };
+      const response = await safely("Report publication", supabaseClient.from("community_reports").insert(payload), document.querySelector("#report-message"), "Could not publish this report.");
+      if (!response) return;
+      const { error } = response;
+      if (error) {
+        console.error("Report publication failed:", error);
+        showRequestError(document.querySelector("#report-message"), "Could not publish this report.", error);
+        return;
+      }
+      communityFilter = type;
+      document.querySelectorAll(".tab-button").forEach((tab) => {
+        const selected = tab.dataset.filter === type;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+      });
+      await refreshCommunity();
+      showMessage(document.querySelector("#report-message"), translate("Report published."));
+      currentReportCoordinates = null;
+      event.currentTarget.reset();
+      window.setTimeout(() => document.querySelector("#report-dialog").close(), 1800);
+    });
+    document.querySelector("#listing-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!currentUser || !supabaseClient) {
+        showMessage(document.querySelector("#listing-message"), translate("Please sign in again before continuing."), true);
+        return;
+      }
+      const fields = new FormData(event.currentTarget);
+      const response = await safely("Cat listing publication", supabaseClient.from("cat_listings").insert({
+        owner_id: currentUser.id,
+        name: String(fields.get("name")),
+        age: String(fields.get("age") || ""),
+        description: String(fields.get("description")),
+        location: String(fields.get("location")),
+        latitude: currentListingCoordinates?.latitude ?? null,
+        longitude: currentListingCoordinates?.longitude ?? null,
+        image_url: String(fields.get("image_url") || "") || null
+      }), document.querySelector("#listing-message"), "Could not publish this listing.");
+      if (!response) return;
+      const { error } = response;
+      if (error) {
+        console.error("Cat listing publication failed:", error);
+        showRequestError(document.querySelector("#listing-message"), "Could not publish this listing.", error);
+        return;
+      }
+      try {
+        await refreshListings();
+        showMessage(document.querySelector("#listing-message"), translate("Cat listing published."));
+      } catch (error) {
+        console.error("Cat listing was published but the listing refresh failed:", error);
+        showMessage(
+          document.querySelector("#listing-message"),
+          translate("Cat listing published, but the list could not refresh. Reload the page to see it."),
+          true
+        );
+      }
+      event.currentTarget.reset();
+      window.setTimeout(() => document.querySelector("#listing-dialog").close(), 1800);
+    });
+    document.querySelector("#application-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!currentUser || !pendingListingId || !supabaseClient) {
+        showMessage(document.querySelector("#application-dialog-message"), translate("Please sign in again before continuing."), true);
+        return;
+      }
+      const fields = new FormData(event.currentTarget);
+      const response = await safely("Adoption inquiry", supabaseClient.from("adoption_applications").insert({
+        listing_id: pendingListingId,
+        applicant_id: currentUser.id,
+        message: String(fields.get("message"))
+      }), document.querySelector("#application-dialog-message"), "Could not send this inquiry.");
+      if (!response) return;
+      const { error } = response;
+      if (error) {
+        console.error("Adoption inquiry failed:", error);
+        showRequestError(document.querySelector("#application-dialog-message"), "Could not send this inquiry.", error);
+        return;
+      }
+      showMessage(document.querySelector("#application-dialog-message"), translate("Adoption inquiry sent."));
+      event.currentTarget.reset();
+      window.setTimeout(() => document.querySelector("#application-dialog").close(), 1800);
+    });
+    document.querySelector(".menu-toggle").addEventListener("click", (event) => {
+      const menu = document.querySelector(".nav-links");
+      const isOpen = menu.classList.toggle("open");
+      event.currentTarget.setAttribute("aria-expanded", String(isOpen));
+      event.currentTarget.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    });
+    document.querySelectorAll(".nav-links a").forEach((link) => link.addEventListener("click", () => {
+      document.querySelector(".nav-links").classList.remove("open");
+      document.querySelector(".menu-toggle").setAttribute("aria-expanded", "false");
+    }));
+  </script>
+</body>
+</html>
